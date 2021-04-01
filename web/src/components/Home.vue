@@ -1,4 +1,4 @@
-Copyright (c) 2020 HITCON Agent Contributors
+<!-- Copyright (c) 2020 HITCON Agent Contributors
 See CONTRIBUTORS file for the list of HITCON Agent Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -17,4 +17,47 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+SOFTWARE. -->
+
+<template>
+  <v-card>
+    <v-divider />
+    <v-card-text>
+      <Tab />
+    </v-card-text>
+  </v-card>
+</template>
+
+<script>
+import Tab from '@/components/Tab'
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapGetters, mapActions } = createNamespacedHelpers('game')
+
+export default {
+  components: {
+    Tab,
+  },
+  computed: {
+    ...mapState(['nameList']),
+    ...mapGetters(['getNameList']),
+  },
+  methods: {
+    ...mapActions(['setScoresMap', 'setNameList', 'updateScoresMap', 'setCurrentName']),
+  },
+  mounted() {
+    this.$socket.on('SGl0Y29uMjAyMA==', data => {
+      this.setNameList(data.gameList)
+      this.setScoresMap(data.scoresMap)
+      if (this.nameList.length > 0) {
+        this.setCurrentName(this.nameList[0])
+      }
+    })
+    this.$socket.on('scoreList', data => {
+      let d = JSON.parse(data)
+      if (d.message.reply.error === 'ERROR_NONE') {
+        this.updateScoresMap([d.gameName, d.message.scores])
+      }
+    })
+  },
+}
+</script>

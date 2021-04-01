@@ -1,4 +1,4 @@
-Copyright (c) 2020 HITCON Agent Contributors
+<!-- Copyright (c) 2020 HITCON Agent Contributors
 See CONTRIBUTORS file for the list of HITCON Agent Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -17,4 +17,43 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+SOFTWARE. -->
+
+<template>
+  <v-snackbar
+    :timeout="3000"
+    bottom
+    v-model="snackbar.visible"
+  >
+    {{ snackbar.text }}
+  </v-snackbar>
+</template>
+
+<script>
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapGetters } = createNamespacedHelpers('game')
+
+export default {
+  computed: {
+    ...mapState(['currentName']),
+    ...mapGetters(['getCurrentName']),
+  },
+  data() {
+    return {
+      snackbar: {
+        visible: false,
+        text: '',
+      },
+    }
+  },
+  mounted() {
+    this.$socket.on('event', data => {
+      let d = JSON.parse(data)
+      if (this.currentName === d.gameName) {
+        this.snackbar.text = `GameName: ${d.gameName}, ${d.message.replace(/"/g, '')}`
+        this.snackbar.visible = true
+      }
+    })
+  },
+}
+</script>

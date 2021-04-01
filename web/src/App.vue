@@ -1,4 +1,4 @@
-Copyright (c) 2020 HITCON Agent Contributors
+<!-- Copyright (c) 2020 HITCON Agent Contributors
 See CONTRIBUTORS file for the list of HITCON Agent Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -17,4 +17,21 @@ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+SOFTWARE. -->
+
+<template>
+  <v-app id="app">
+    <EventNotification />
+    <router-view />
+  </v-app>
+</template>
+
+<script>
+import EventNotification from '@/components/EventNotification'
+
+export default {
+  components: {
+    EventNotification,
+  },
+}
+</script>
